@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "author": "Pressnave K",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "pm2 start server.js",
+    "start:dev": "pm2 start server.js --watch",
+    "restart": "pm2 restart server.js",
+    "stop": "pm2 stop server.js",
+    "delete": "pm2 delete server.js",
+    "logs": "pm2 logs server.js",
+    "monit": "pm2 server.js",
+    "save": "pm2 server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "ioredis": "^5.4.1",
+    "mysql2": "^3.11.5",
+    "nodemon": "^3.1.7",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "pm2": "^5.4.3"
+  }
+}
