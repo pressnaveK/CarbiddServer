@@ -3,8 +3,8 @@ const mysql = require('mysql2');
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'root', 
-  database: 'car_auction',
+  password: 'root'
+  
 });
 
 db.connect((err) => {
@@ -23,4 +23,14 @@ db.connect((err) => {
   });
 });
 
-module.exports = db;
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'car_auction',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
+});
+
+module.exports = {db , pool};

@@ -1,4 +1,4 @@
-const Redis = require('ioredis');
+Redis = require("ioredis");
 
 const redis = new Redis({
   host: 'localhost',
@@ -6,8 +6,11 @@ const redis = new Redis({
   db: 0,
 });
 
+const pubClient = redis.duplicate();
+const subClient = redis.duplicate();
+
 redis.on('connect', () => {
   console.log('Connected to Redis');
 });
 
-module.exports = redis;
+module.exports = {redis , pubClient ,subClient};

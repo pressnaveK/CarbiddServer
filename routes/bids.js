@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/mysql');
+const {pool} = require('../config/mysql');
 
 // POST endpoint to place a new bid
 router.post('/bids', (req, res) => {
@@ -15,7 +15,7 @@ router.post('/bids', (req, res) => {
     INSERT INTO bids (user_id, auction_id, bid_amount) VALUES (?, ?, ?)
   `;
 
-  db.query(query, [user_id, auction_id, bid_amount], (err, result) => {
+  pool.query(query, [user_id, auction_id, bid_amount], (err, result) => {
     if (err) {
       console.error('Error placing bid:', err);
       return res.status(500).json({ message: 'Database error' });

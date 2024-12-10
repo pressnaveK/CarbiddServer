@@ -1,6 +1,6 @@
 const express = require('express');
-const db = require('../config/mysql');
-const redis = require('../config/redis'); // Assuming this is the Redis connection
+const {pool} = require('../config/mysql');
+const {redis} = require('../config/redis'); // Assuming this is the Redis connection
 const router = express.Router();
 
 const CACHE_KEY = 'auctions_cache';
@@ -15,7 +15,7 @@ router.post('/auctions', async (req, res) => {
 
   const query = 'INSERT INTO auctions (auction_id, car_id, start_datetime, end_datetime) VALUES (?, ?, ?, ?)';
 
-  db.query(query, [auction_id, car_id, start_datetime, end_datetime], async (err) => {
+  pool.query(query, [auction_id, car_id, start_datetime, end_datetime], async (err) => {
     if (err) {
       console.error('Error inserting auction:', err);
       return res.status(500).json({ message: 'Database error' });
@@ -44,7 +44,7 @@ router.get('/auctions', async (req, res) => {
 
     // Fetch data from the database if not cached
     const query = 'SELECT * FROM auctions WHERE end_datetime > NOW()';
-    db.query(query, async (err, results) => {
+    pool.query(query, async (err, results) => {
       if (err) {
         console.error('Error fetching auctions:', err);
         return res.status(500).json({ message: 'Database error' });

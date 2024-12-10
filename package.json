@@ -16,8 +16,11 @@
     "save": "pm2 server.js"
   },
   "dependencies": {
+    "@socket.io/redis-streams-adapter": "^0.2.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "express-rate-limit": "^7.4.1",
+    "express-rate-limit-redis": "^0.0.4",
     "ioredis": "^5.4.1",
     "mysql2": "^3.11.5",
     "nodemon": "^3.1.7",

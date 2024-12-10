@@ -1,14 +1,17 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
+const { createAdapter } = require ("@socket.io/redis-streams-adapter");
+const {pubClient ,subClient} = require('./config/redis');
 const auctionSocket = require('./sockets/auctionSocket');
 
+
 // Configurations
-const db = require('./config/mysql');
-const redis = require('./config/redis');
 const setupDatabase = require('./createDatabase'); 
 setupDatabase();
+
 
 // Routes
 const authRoutes = require('./routes/auth');
@@ -19,6 +22,17 @@ const usersRouter = require('./routes/users');
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Create a rate limit rule
+const limiter = rateLimit({
+  
+  windowMs: 2  * 1000, // 2 sec
+  max: 1, // Limit each IP to 1 request per windowMs
+  message: 'Too many requests, please try again later', // Custom message when limit is exceeded
+  headers: true, // Set the rate-limit headers (X-RateLimit-Limit and X-RateLimit-Remaining)
+});
+
+app.use(limiter);
 
 // Register REST API routes
 app.use('/', authRoutes);
@@ -32,6 +46,7 @@ const server = http.createServer(app);
 // Initialize WebSocket server
 const io = new Server(server, {
   cors: { origin: 'http://localhost:3000', methods: ['GET', 'POST'] },
+  adapter: createAdapter(pubClient, subClient)
 });
 
 auctionSocket(io);

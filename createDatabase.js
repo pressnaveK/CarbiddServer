@@ -1,4 +1,4 @@
-const db = require('./config/mysql'); // Import the centralized DB connection
+const {db} = require('./config/mysql'); // Import the centralized DB connection
 
 // Create the database and tables
 const setupDatabase = () => {

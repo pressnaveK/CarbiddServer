@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const db = require('../config/mysql');
+const {pool} = require('../config/mysql');
 
 // POST endpoint to create a new user
 router.post('/users', (req, res) => {
@@ -16,7 +16,7 @@ router.post('/users', (req, res) => {
     VALUES (?, ?, ?)
   `;
 
-  db.query(query, [user_id, username, password], (err, result) => {
+  pool.query(query, [user_id, username, password], (err, result) => {
     if (err) {
       console.error('Error inserting user:', err);
       return res.status(500).json({ message: 'Database error' });
